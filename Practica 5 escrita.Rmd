@@ -1,0 +1,157 @@
+---
+title: "Practica5"
+author: "Juan Antonio Fernández Morales"
+date: "2023-03-14"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejercicio 1. Aplica un contraste de hipótesis basado en la media a:
+
+y1 y1 e y2.
+
+```{r}
+set.seed(1)
+z<- rnorm(100)
+x<- rpois(100,10.3)
+y <- rbinom (100, 1, .25)
+y1<- 5*z+x*10+rnorm(100, 2, 1)
+y2<- 5*z+x*12+rnorm(100, 2, 1)
+
+hist(y1)
+hist(y2)
+
+t.test(y1) 
+
+t.test(y1, mu=0)
+t.test(y2, mu=100)
+```
+
+## Ejercicio 2. ¿Por qué decimos que la correlación lineal es una prueba de correlación paramétrica? ¿En qué se diferencian las pruebas paramétricas de las no paramétricas?
+
+Porque la correlación lineal es un método estadísticos que estudia la relación lineal existente entre dos variables.
+
+Las pruebas paramétricas asumen distribuciones estadísticas subyacentes a los datos. Por tanto, deben cumplirse algunas condiciones de validez, de modo que el resultado de la prueba paramétrica sea fiable. Mientras que las pruebas no paramétricas no dehen ajustarse a ninguna distribución. Pueden por tanto aplicarse incluso aunque no se cumplan las condiciones de validez paramétricas.
+
+## Ejercicio 3. Calcula la correlación entre las variables almacenadas en la tabla 'data'. ¿Qué variables se encuentran más asociadas?
+
+```{r}
+library(readxl)
+data <- read_excel("data.xlsx")
+View(data)
+install.packages("correlation")
+library("correlation")
+
+resultados<- correlation(data)
+resultados
+
+```
+
+Las variables más asociadas son la longitud y el peso.
+
+## Ejercicio 4. Calcula los coeficientes de correlación de las variables junto con el nivel de significancia (p-value) en 1 solo gráfico. Interpreta los resultados.
+
+```{r}
+install.packages("ggpubr")
+library("corrplot")
+library(ggpubr)
+correlacion<-round(cor(data), 1)
+corrplot(correlacion, method="number")
+```
+
+## Ejercicio 5. Emplea una función para obtener en una matriz de correlación lineal, IC 95% y pvalue de todas las variables en el data frame 'data'.
+
+```{r}
+correlation::correlation(data)
+```
+
+## Ejercicio 6. Visualiza gráficamente la correlación lineal existente entre las variables 'longitud' y 'peso'
+
+```{r}
+pairs(data$longitud~data$peso)
+```
+
+## Ejercicio 7. Emplea la librería `corrplot()` para visualizar la correlación entre variables.
+
+```{r}
+install.packages("corrplot")
+library("corrplot")
+correlacion<-round(cor(data), 1)
+corrplot(correlacion, method="number")
+```
+
+## Ejercicio 8. A partir de la siguiente secuencia de valores numéricos:
+
+##### a. Crea 2 vectores: 'distancia' y 'n_piezas' para almacenarlos en un data frame.
+
+```{r}
+distancia <- c(1.1,100.2,90.3,5.4,57.5,6.6,34.7,65.8,57.9,86.1)
+n_piezas <- c(110,2,6,98,40,94,31,5,8,10)
+```
+
+##### b. Calcula el coeficiente de correlación
+
+```{r}
+cor(distancia, n_piezas)
+```
+
+##### c. Calcula el nivel de significancia
+
+```{r}
+install.packages("nortest")
+library(nortest)
+ad.test(distancia)
+ad.test(n_piezas)
+```
+
+El nivel de significancia de distancia es del 32% y el nivel de sgnificacia de n_value es del 1%
+
+##### d. Calcula el Intervalo de confianza al 95% en relación con el coeficiente de correlación
+
+```{r}
+t.test(distancia, conf.level=0.95)$conf.int
+t.test(n_piezas, conf.level=0.95)$conf.int
+```
+
+El intervalo de confianza en el vestor distancia es entre 24.1 y 77.01. El intervalo de confianza en el vestor n_piezas es entre 9.3 y 71.49.
+
+##### e. ¿Qué intensidad y dirección presentan ambas variables?
+
+```{r}
+cor(distancia, n_piezas)
+```
+
+La intensidad es 0.9, es decir alta y la dirección es negativa.
+
+##### f. ¿Es significativa esta relación?
+
+```{r}
+correlation(n_piezas, distancia)
+```
+
+##### g. Resulta apropiado afirmar la correlación (o no) entre variables con un tamaño muestral tan reducido (n=10).
+
+No, debido a que no es una muestra significativa
+
+## Ejercicio 9. Explícame con un ejemplo en R la diferencia entre una relación lineal y monótona entre 2 variables.
+
+install.packages("ggplot2", repos = "http://cran.us.r-project.org")
+library("ggplot2")
+install.packages("palmerpenguins", repos = "http://cran.us.r-project.org")
+library("palmerpenguins") 
+
+
+["RELACION LINEAL"](<https://support.minitab.com/es-mx/minitab/20/media/generated-content/images/scatterplot_linear_relationship.png>)
+
+["RELACION MONOTONA"](<https://support.minitab.com/es-mx/minitab/20/media/generated-content/images/scatterplot_cubic_relationship.png>)
+
+Una relación monótona es aquella en la que la relación es positiva o negativa en todos los niveles de las variables\
+
+## Ejercicio 10. ¿Qué tipo de prueba de correlación se aplica a las variables que experimentan una relación monótona? Expón un ejemplo en R.
+
+```{r}
+
+```
